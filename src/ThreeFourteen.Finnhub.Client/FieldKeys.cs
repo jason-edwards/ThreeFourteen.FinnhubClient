@@ -10,5 +10,7 @@
         public const string Exchange = "exchange";
         public const string Category = "category";
         public const string MinId = "minId";
+        public const string Adjusted = "adjusted";
+        public const string Format = "format";
     }
 }

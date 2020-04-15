@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace ThreeFourteen.Finnhub.Client.Model
 {
@@ -57,5 +58,29 @@ namespace ThreeFourteen.Finnhub.Client.Model
 
         [JsonProperty("weburl")]
         public string Weburl { get; set; }
+
+        [JsonProperty("ipo")]
+        public DateTime Ipo { get; set; }
+
+        [JsonProperty("sedol")]
+        public string Sedol { get; set; }
+
+        [JsonProperty("employeeTotal")]
+        public string EmployeeTotal { get; set; }
+
+        [JsonProperty("marketCapitalization")]
+        public decimal MarketCap { get; set; }
+
+        [JsonProperty("naicsNationalIndustry")]
+        public string NaicsNatInd { get; set; }
+        
+        [JsonProperty("naicsSector")]
+        public string NaicsSector { get; set; }
+
+        [JsonProperty("naicsSubsector")]
+        public string NaicsSubsector { get; set; }
+
+        [JsonProperty("shareOutstanding")]
+        public decimal ShareOutstanding { get; set; }
     }
 }

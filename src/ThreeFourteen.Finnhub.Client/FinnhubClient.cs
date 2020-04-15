@@ -62,6 +62,7 @@ namespace ThreeFourteen.Finnhub.Client
             var parameters = CreateParameters(fields);
 
             var uri = new Uri(_config.BaseUri, $"/api/v1/{operation}?{parameters}");
+            Console.WriteLine(uri);
 
             using (var responseMessage = await _httpClient.GetAsync(uri).ConfigureAwait(false))
             {
