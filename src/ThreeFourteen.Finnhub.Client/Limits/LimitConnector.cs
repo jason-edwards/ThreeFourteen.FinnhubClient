@@ -1,10 +1,7 @@
 ﻿using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ThreeFourteen.Finnhub.Client.Limits
 {
@@ -13,16 +10,19 @@ namespace ThreeFourteen.Finnhub.Client.Limits
         private ApiContext _dbContext;
         private long _weightMax;
         private int _weightPeriod; //in minutes
+        private int _rateMax; //calls per second.
         internal LimitConnector(ApiContext apiContext)
         {
             _dbContext = apiContext;
             _weightMax = 60;
+            _rateMax = 30; 
             _weightPeriod = 1;
         }
 
         public bool AddRequest(string request, long weight)
         {
             bool success = CheckWeightLimit(weight);
+            success = success && CheckRateLimit();
             if (success)
             {
                 _dbContext.ApiRequests.Add(new ApiRequest { Description = request, Weight = weight, RequestTime = DateTime.Now });
@@ -34,7 +34,14 @@ namespace ThreeFourteen.Finnhub.Client.Limits
 
         public bool CheckRateLimit()
         {
+            var records = _dbContext.ApiRequests
+                .Where(b => b.RequestTime > DateTime.Now.AddSeconds(-1));
 
+            if(records.Count() > _rateMax)
+            {
+                Thread.Sleep(100);
+                CheckRateLimit();
+            }
             return true;
         }
 
@@ -59,7 +66,7 @@ namespace ThreeFourteen.Finnhub.Client.Limits
 
                 if (weightTotal > _weightMax)
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(100);
                     CheckWeightLimit(weightRequest);
                 }
             }
